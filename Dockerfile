@@ -7,6 +7,9 @@ FROM debian:stretch-slim
 
 MAINTAINER Oliver Wolf <root@streacs.com>
 
+ARG APPLICATION_RELEASE
+ARG APPLICATION_SERVER
+
 ENV JAVA_VERSION_MAJOR=8
 ENV JAVA_VERSION_MINOR=152
 ENV JAVA_VERSION_BUILD=16
@@ -39,7 +42,12 @@ RUN set -x \
 
 RUN set -x \
   && mkdir -p ${APPLICATION_INST} \
-  && mkdir -p ${APPLICATION_HOME}
+  && mkdir -p ${APPLICATION_HOME} \
+  && wget --no-check-certificate -nv -O /tmp/atlassian-bamboo-agent-installer.jar ${APPLICATION_SERVER}/agentServer/agentInstaller/atlassian-bamboo-agent-installer.jar \
+  && java -Dbamboo.home=${APPLICATION_INST} -jar /tmp/atlassian-bamboo-agent-installer.jar ${APPLICATION_SERVER}/agentServer install \
+  && chown -R ${SYSTEM_USER}:${SYSTEM_GROUP} ${APPLICATION_INST} \
+  && chown -R ${SYSTEM_USER}:${SYSTEM_GROUP} ${APPLICATION_HOME} \
+  && rm /tmp/atlassian-bamboo-agent-installer.jar
 
 RUN set -x \
   && apt-get clean \
