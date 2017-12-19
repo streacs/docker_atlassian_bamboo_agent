@@ -53,3 +53,5 @@ RUN set -x \
   && apt-get clean \
   && rm -rf /var/cache/* \
   && rm -rf /tmp/*
+
+CMD ["/usr/local/bin/service"]
