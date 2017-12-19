@@ -54,4 +54,12 @@ RUN set -x \
   && rm -rf /var/cache/* \
   && rm -rf /tmp/*
 
+ADD files/service /usr/local/bin/service
+
+VOLUME ${APPLICATION_HOME}
+
+USER ${SYSTEM_USER}
+
+WORKDIR ${APPLICATION_HOME}
+
 CMD ["/usr/local/bin/service"]
