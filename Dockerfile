@@ -22,6 +22,7 @@ ENV APPLICATION_HOME /var/opt/atlassian/application-data/bamboo
 
 ENV SYSTEM_USER bamboo
 ENV SYSTEM_GROUP bamboo
+ENV SYSTEM_HOME /home/bamboo
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -38,7 +39,7 @@ RUN set -x \
 
 RUN set -x \
   && addgroup --system ${SYSTEM_GROUP} \
-  && adduser --system --ingroup ${SYSTEM_GROUP} ${SYSTEM_USER}
+  && adduser --system --home ${SYSTEM_HOME} --ingroup ${SYSTEM_GROUP} ${SYSTEM_USER}
 
 RUN set -x \
   && mkdir -p ${APPLICATION_INST} \
@@ -66,6 +67,6 @@ ENTRYPOINT ["/usr/local/bin/entrypoint"]
 
 USER ${SYSTEM_USER}
 
-WORKDIR ${APPLICATION_HOME}
+WORKDIR ${SYSTEM_HOME}
 
 CMD ["/usr/local/bin/service"]
