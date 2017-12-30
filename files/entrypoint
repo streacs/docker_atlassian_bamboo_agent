@@ -1,0 +1,18 @@
+#!/bin/bash
+
+if [ "$(stat -c "%Y" "${APPLICATION_INST}/conf/wrapper.conf")" -eq "0" ]; then
+  if [ -n "${JVM_MEMORY_MIN}" ]; then
+    sed --in-place "s~wrapper.java.initmemory=.*~wrapper.java.initmemory=${JVM_MEMORY_MIN}~" ${APPLICATION_INST}/conf/wrapper.conf
+  fi
+  if [ -n "${JVM_MEMORY_MAX}" ]; then
+    sed --in-place "s~wrapper.java.maxmemory=.*~wrapper.java.maxmemory=${JVM_MEMORY_MAX}~" ${APPLICATION_INST}/conf/wrapper.conf
+  fi
+  if [ -n "${APPLICATION_SERVER}" ]; then
+    sed --in-place "s~wrapper.app.parameter.2=.*~wrapper.app.parameter.2=${APPLICATION_SERVER}/agentServer~" ${APPLICATION_INST}/conf/wrapper.conf
+  fi
+  if [ -n "${DISABLE_AGENT_AUTO_CAPABILITY_DETECTION}" ]; then
+    sed --in-place "s~#wrapper.java.additional.3=-agentlib:yjpagent~wrapper.java.additional.3=-DDISABLE_AGENT_AUTO_CAPABILITY_DETECTION=${DISABLE_AGENT_AUTO_CAPABILITY_DETECTION}~" ${APPLICATION_INST}/conf/wrapper.conf
+  fi
+fi
+
+exec "$@"
