@@ -67,6 +67,7 @@ public class PlanSpec {
             project(),
             "STREACS Atlassian Bamboo Agent", "AF51DE")
             .enabled(true)
+            .noNotifications()
             .linkedRepositories("DCK - STREACS Atlassian Bamboo Agent (master)")
             .planBranchManagement(new PlanBranchManagement()
                 .createForVcsBranchMatching("^feature/.*|^release/.*|^develop")
