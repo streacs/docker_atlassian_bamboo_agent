@@ -28,9 +28,9 @@ function build_container {
     ;;
     release*)
       GIT_HASH="$(git rev-parse --short HEAD)"
-      APPLICATION_RELEASE="$(git symbolic-ref --short HEAD | grep -o -E "(\d{1,2}\.){2,3}\d")"
+      APPLICATION_RELEASE="$(git symbolic-ref --short HEAD | awk -F'/' '{print $2}')"
       echo "Building RELEASE (${GIT_HASH}) with RELEASE $APPLICATION_RELEASE"
-      docker build --no-cache -t ${DOCKER_REPOSITORY}/${APPLICATION_NAME}:${APPLICATION_RELEASE} --build-arg APPLICATION_SERVER=${APPLICATION_SERVER} --build-arg APPLICATION_RELEASE=${APPLICATION_RELEASE} .
+      docker build --no-cache -t ${DOCKER_REPOSITORY}/${APPLICATION_NAME}:${APPLICATION_RELEASE} --build-arg APPLICATION_SERVER=${APPLICATION_SERVER} .
     ;;
     feature*)
       GIT_HASH="$(git rev-parse --short HEAD)"
@@ -53,7 +53,7 @@ function test_container {
       docker run -t --rm --env-file files/environment.list ${DOCKER_REPOSITORY}/${APPLICATION_NAME}:develop rake spec /home/bamboo/spec
     ;;
     release*)
-      APPLICATION_RELEASE="$(git symbolic-ref --short HEAD | grep -o -E "(\d{1,2}\.){2,3}\d")"
+      APPLICATION_RELEASE="$(git symbolic-ref --short HEAD | awk -F'/' '{print $2}')"
       docker run -t --rm --env-file files/environment.list ${DOCKER_REPOSITORY}/${APPLICATION_NAME}:${APPLICATION_RELEASE} rake spec /home/bamboo/spec
     ;;
     feature*)
@@ -75,7 +75,7 @@ function remove_container {
       docker rmi ${DOCKER_REPOSITORY}/${APPLICATION_NAME}:develop
     ;;
     release*)
-      APPLICATION_RELEASE="$(git symbolic-ref --short HEAD | grep -o -E "(\d{1,2}\.){2,3}\d")"
+      APPLICATION_RELEASE="$(git symbolic-ref --short HEAD | awk -F'/' '{print $2}')"
       docker rmi ${DOCKER_REPOSITORY}/${APPLICATION_NAME}:${APPLICATION_RELEASE}
     ;;
     feature*)
@@ -97,7 +97,7 @@ function deploy_container {
       docker push ${DOCKER_REPOSITORY}/${APPLICATION_NAME}:develop
     ;;
     release*)
-      APPLICATION_RELEASE="$(git symbolic-ref --short HEAD | grep -o -E "(\d{1,2}\.){2,3}\d")"
+      APPLICATION_RELEASE="$(git symbolic-ref --short HEAD | awk -F'/' '{print $2}')"
       docker push ${DOCKER_REPOSITORY}/${APPLICATION_NAME}:${APPLICATION_RELEASE}
     ;;
     feature*)
