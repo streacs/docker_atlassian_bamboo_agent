@@ -62,6 +62,7 @@ RUN set -x \
 ADD files/service /usr/local/bin/service
 ADD files/entrypoint /usr/local/bin/entrypoint
 ADD files/healthcheck /usr/local/bin/healthcheck
+ADD files/bamboo-capabilities.properties ${APPLICATION_INST}/bin/bamboo-capabilities.properties
 ADD rspec-specs ${SYSTEM_HOME}/
 
 VOLUME ${APPLICATION_HOME}
