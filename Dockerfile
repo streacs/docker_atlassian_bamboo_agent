@@ -28,8 +28,14 @@ ENV DEBIAN_FRONTEND noninteractive
 
 RUN set -x \
   && apt-get update \
-  && apt-get -y --no-install-recommends install wget procps ca-certificates git ruby-rspec ssh \
+  && apt-get -y --no-install-recommends install wget procps ca-certificates git ruby-rspec ssh apt-transport-https gnupg2 \
   && gem install serverspec
+
+RUN set -x \
+  && wget -qO - https://packages.chef.io/chef.asc | apt-key add - \
+  && echo "deb https://packages.chef.io/repos/apt/stable jessie main" > /etc/apt/sources.list.d/chef-stable.list \
+  && apt-get update \
+  && apt-get -y --no-install-recommends install chefdk
 
 RUN set -x \
   && wget -q --no-cookies --no-check-certificate --header "Cookie: oraclelicense=accept-securebackup-cookie" -O /tmp/jdk-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64.tar.gz http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-b${JAVA_VERSION_BUILD}/${JAVA_VERSION_PATH}/jdk-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64.tar.gz \
