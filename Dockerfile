@@ -15,6 +15,8 @@ ENV JAVA_VERSION_MINOR=162
 ENV JAVA_VERSION_BUILD=12
 ENV JAVA_VERSION_PATH=0da788060d494f5095bf8624735fa2f1
 
+ENV DOCKER_CLI_RELEASE=17.12.0
+
 ENV JAVA_HOME=/opt/jdk
 
 ENV APPLICATION_INST /opt/atlassian/bamboo
@@ -36,6 +38,14 @@ RUN set -x \
   && echo "deb https://packages.chef.io/repos/apt/stable jessie main" > /etc/apt/sources.list.d/chef-stable.list \
   && apt-get update \
   && apt-get -y --no-install-recommends install chefdk
+
+RUN set -x \
+  && /usr/bin/chef gem install kitchen-docker
+
+RUN set -x \
+  && wget -qO - https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_CLI_RELEASE}-ce.tgz  -O /tmp/docker-${DOCKER_CLI_RELEASE}-ce.tgz \
+  && tar xfz /tmp/docker-${DOCKER_CLI_RELEASE}-ce.tgz --strip-components=1 -C /usr/bin/ \
+  && rm /tmp/docker-${DOCKER_CLI_RELEASE}-ce.tgz
 
 RUN set -x \
   && wget -q --no-cookies --no-check-certificate --header "Cookie: oraclelicense=accept-securebackup-cookie" -O /tmp/jdk-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64.tar.gz http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-b${JAVA_VERSION_BUILD}/${JAVA_VERSION_PATH}/jdk-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64.tar.gz \
