@@ -11,9 +11,9 @@ ARG APPLICATION_RELEASE
 ARG APPLICATION_SERVER
 
 ENV JAVA_VERSION_MAJOR=8
-ENV JAVA_VERSION_MINOR=152
-ENV JAVA_VERSION_BUILD=16
-ENV JAVA_VERSION_PATH=aa0333dd3019491ca4f6ddbe78cdb6d0
+ENV JAVA_VERSION_MINOR=171
+ENV JAVA_VERSION_BUILD=11
+ENV JAVA_VERSION_PATH=512cd62ec5174c3487ac17c61aaa89e8
 
 ENV JAVA_HOME=/opt/jdk
 
@@ -62,6 +62,7 @@ RUN set -x \
 ADD files/service /usr/local/bin/service
 ADD files/entrypoint /usr/local/bin/entrypoint
 ADD files/healthcheck /usr/local/bin/healthcheck
+ADD files/bamboo-capabilities.properties ${APPLICATION_INST}/bin/bamboo-capabilities.properties
 ADD rspec-specs ${SYSTEM_HOME}/
 
 VOLUME ${APPLICATION_HOME}
