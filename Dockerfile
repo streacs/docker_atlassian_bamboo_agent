@@ -40,9 +40,6 @@ RUN set -x \
   && apt-get -y --no-install-recommends install chefdk
 
 RUN set -x \
-  && /usr/bin/chef gem install kitchen-docker
-
-RUN set -x \
   && wget -qO - https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_CLI_RELEASE}-ce.tgz  -O /tmp/docker-${DOCKER_CLI_RELEASE}-ce.tgz \
   && tar xfz /tmp/docker-${DOCKER_CLI_RELEASE}-ce.tgz --strip-components=1 -C /usr/bin/ \
   && rm /tmp/docker-${DOCKER_CLI_RELEASE}-ce.tgz
@@ -86,6 +83,9 @@ VOLUME ${APPLICATION_HOME}
 ENTRYPOINT ["/usr/local/bin/entrypoint"]
 
 USER ${SYSTEM_USER}
+
+RUN set -x \
+  && /usr/bin/chef gem install kitchen-docker
 
 WORKDIR ${SYSTEM_HOME}
 
