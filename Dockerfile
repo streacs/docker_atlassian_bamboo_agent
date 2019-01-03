@@ -10,13 +10,6 @@ MAINTAINER Oliver Wolf <root@streacs.com>
 ARG APPLICATION_RELEASE
 ARG APPLICATION_SERVER
 
-ENV JAVA_VERSION_MAJOR=8
-ENV JAVA_VERSION_MINOR=191
-ENV JAVA_VERSION_BUILD=12
-ENV JAVA_VERSION_PATH=2787e4a523244c269598db4e85c51e0c
-
-ENV JAVA_HOME=/opt/jdk
-
 ENV APPLICATION_INST /opt/atlassian/bamboo
 ENV APPLICATION_HOME /var/opt/atlassian/application-data/bamboo
 
@@ -28,15 +21,8 @@ ENV DEBIAN_FRONTEND noninteractive
 
 RUN set -x \
   && apt-get update \
-  && apt-get -y --no-install-recommends install wget procps ca-certificates git ruby-rspec ssh \
+  && apt-get -y --no-install-recommends install wget procps ca-certificates git ruby-rspec ssh openjdk-8-jdk-headless \
   && gem install serverspec
-
-RUN set -x \
-  && wget -q --no-cookies --no-check-certificate --header "Cookie: oraclelicense=accept-securebackup-cookie" -O /tmp/jdk-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64.tar.gz http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-b${JAVA_VERSION_BUILD}/${JAVA_VERSION_PATH}/jdk-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64.tar.gz \
-  && mkdir -p ${JAVA_HOME} \
-  && tar xfz /tmp/jdk-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64.tar.gz --strip-components=1 -C ${JAVA_HOME} \
-  && update-alternatives --install /usr/bin/java java ${JAVA_HOME}/bin/java 1 \
-  && rm /tmp/jdk-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64.tar.gz
 
 RUN set -x \
   && addgroup --system ${SYSTEM_GROUP} \
