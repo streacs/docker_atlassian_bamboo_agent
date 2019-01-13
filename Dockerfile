@@ -24,7 +24,7 @@ RUN set -x \
   
 RUN set -x \
   && apt-get update \
-  && apt-get -y --no-install-recommends install wget procps ca-certificates git ruby-rspec ssh openjdk-8-jdk-headless \
+  && apt-get -y --no-install-recommends install wget unzip procps ca-certificates git ruby-rspec ssh openjdk-8-jdk-headless \
   && gem install serverspec
 
 RUN set -x \
@@ -39,6 +39,12 @@ RUN set -x \
   && chown -R ${SYSTEM_USER}:${SYSTEM_GROUP} ${APPLICATION_INST} \
   && chown -R ${SYSTEM_USER}:${SYSTEM_GROUP} ${APPLICATION_HOME} \
   && rm /tmp/atlassian-bamboo-agent-installer.jar
+
+RUN set -x \
+  && wget --no-check-certificate -nv -O /tmp/packer_1.3.3_linux_amd64.zip https://releases.hashicorp.com/packer/1.3.3/packer_1.3.3_linux_amd64.zip \
+  && unzip /tmp/packer_1.3.3_linux_amd64.zip -d /tmp/ \
+  && mv /tmp/packer /usr/local/bin/packer \
+  && rm /tmp/packer_1.3.3_linux_amd64.zip
 
 RUN set -x \
   && apt-get clean \
