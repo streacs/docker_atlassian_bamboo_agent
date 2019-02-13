@@ -24,7 +24,7 @@ RUN set -x \
   
 RUN set -x \
   && apt-get update \
-  && apt-get -y --no-install-recommends install wget procps ca-certificates git ruby-rspec ssh openjdk-8-jdk-headless \
+  && apt-get -y --no-install-recommends install wget procps ca-certificates git ruby-rspec ssh openjdk-8-jdk \
   && gem install serverspec
 
 RUN set -x \
